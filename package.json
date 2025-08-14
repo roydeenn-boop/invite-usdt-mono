@@ -1,0 +1,22 @@
+{
+  "name": "invite-usdt-mono",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm -ws run build",
+    "dev": "npm -w apps/api run dev & npm -w apps/web run dev",
+    "db:push": "prisma db push",
+    "db:seed": "tsx prisma/seed.ts"
+  },
+  "devDependencies": {
+    "prisma": "5.18.0",
+    "tsx": "4.19.2",
+    "typescript": "5.5.4"
+  },
+  "dependencies": {
+    "@prisma/client": "5.18.0"
+  }
+}
