@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 
-const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+const API = process.env.NEXT_PUBLIC_API_URL || 'https://invite-usdt-api.vercel.app/';
 
 export default function Home(){
   const [token, setToken] = useState('');
