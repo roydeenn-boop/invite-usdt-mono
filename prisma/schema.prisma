@@ -1,0 +1,59 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserStatus {
+  ACTIVE
+  FROZEN
+  BLOCKED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  ip        String?
+  status    UserStatus @default(ACTIVE)
+  role      String   @default("user")
+  createdAt DateTime @default(now())
+  invites   Invite[]
+  deposits  Deposit[]
+  withdrawals Withdrawal[]
+}
+
+model Invite {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  createdBy String?
+  createdAt DateTime @default(now())
+  usedBy    String?  // user id
+  usedAt    DateTime?
+}
+
+model Deposit {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  amount    Decimal  @db.Decimal(38,6)
+  txid      String   @unique
+  status    String   @default("pending") // pending, confirmed, rejected
+  createdAt DateTime @default(now())
+  confirmedAt DateTime?
+}
+
+model Withdrawal {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  amount    Decimal  @db.Decimal(38,6)
+  toAddress String
+  status    String   @default("requested") // requested, approved, sent, rejected
+  createdAt DateTime @default(now())
+  processedAt DateTime?
+}
